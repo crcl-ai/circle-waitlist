@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Our Waitlist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #1d1d1f;
+            line-height: 1.4;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 580px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .title {
+            font-size: clamp(3.5rem, 8vw, 5.5rem);
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.05em; /* -5% kerning */
+            margin-bottom: 4rem;
+            line-height: 0.95;
+            font-feature-settings: 'kern' 1;
+        }
+
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 17px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            border: 1px solid #d2d2d7;
+            border-radius: 50px; /* Full capsule shape */
+            background: #ffffff;
+            color: #1d1d1f;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            outline: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .email-input:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1),
+                        0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .email-input::placeholder {
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        .submit-btn {
+            padding: 16px 32px;
+            font-size: 17px;
+            font-weight: 500;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: white;
+            background: #007aff;
+            border: none;
+            border-radius: 50px; /* Capsule shape */
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+            min-width: 160px;
+        }
+
+        .submit-btn:hover {
+            background: #0056d6;
+            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+        }
+
+        .success-message {
+            margin-top: 1.5rem;
+            padding: 16px 24px;
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.2);
+            border-radius: 12px;
+            color: #30d158;
+            font-weight: 500;
+            font-size: 15px;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Loading state */
+        .submit-btn:disabled {
+            background: #d1d1d6;
+            color: #86868b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .submit-btn.success {
+            background: #30d158;
+            color: transparent;
+            transform: scale(1.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .submit-btn.success::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 12px;
+            margin: -8px 0 0 -3px;
+            border: 2px solid white;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg);
+            animation: checkmark 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes checkmark {
+            0% {
+                height: 0;
+                width: 0;
+                opacity: 0;
+            }
+            20% {
+                height: 0;
+                width: 6px;
+                opacity: 1;
+            }
+            40% {
+                height: 12px;
+                width: 6px;
+                opacity: 1;
+            }
+            100% {
+                height: 12px;
+                width: 6px;
+                opacity: 1;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .title {
+                margin-bottom: 3rem;
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+            
+            .email-form {
+                gap: 1.5rem;
+            }
+
+            .email-input {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 16px 20px;
+            }
+
+            .submit-btn {
+                padding: 14px 28px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .input-container {
+                max-width: 100%;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #000000;
+                color: #f5f5f7;
+            }
+
+            .title {
+                color: #f5f5f7;
+            }
+
+            .email-input {
+                background: #1c1c1e;
+                border-color: #38383a;
+                color: #f5f5f7;
+            }
+
+            .email-input::placeholder {
+                color: #86868b;
+            }
+
+            .email-input:focus {
+                border-color: #007aff;
+                background: #1c1c1e;
+            }
+
+            .success-message {
+                background: rgba(48, 209, 88, 0.15);
+                border-color: rgba(48, 209, 88, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Get early access</h1>
+        
+        <form class="email-form" id="waitlistForm">
+            <div class="input-container">
+                <input 
+                    type="email" 
+                    class="email-input" 
+                    placeholder="Enter your email address"
+                    required
+                    autocomplete="email"
+                    name="email"
+                    id="email"
+                >
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+            <div class="success-message" id="successMessage">
+                Thanks! We'll notify you when we launch.
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Get source from URL parameter or default to 'Waitlist Page'
+        function getSourceFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('source') || 'Waitlist Page';
+        }
+
+        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            const source = getSourceFromURL();
+            
+            // Add loading state
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            // Create URL with parameters for GET request (more reliable than POST for CORS)
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyfNbIef269E5g3IUAL2VEi3famDJVE58PoDeoIQ_VoZwd38K0ZzPtFS0xyYIpqYAYW/exec';
+            const params = new URLSearchParams({
+                email: email,
+                source: source
+            });
+            
+            // Use an image element to make the request (bypasses CORS)
+            const img = new Image();
+            img.onload = function() {
+                // Success - remove loading state and add success state
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.classList.add('success');
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // Clear the form
+                document.getElementById('email').value = '';
+                
+                // Reset button after animation and hide success message
+                setTimeout(() => {
+                    submitBtn.classList.remove('success');
+                    successMessage.style.display = 'none';
+                }, 3000);
+            };
+            
+            img.onerror = function() {
+                // Even "errors" often mean success with this method
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.classList.add('success');
+                
+                successMessage.style.display = 'block';
+                document.getElementById('email').value = '';
+                
+                setTimeout(() => {
+                    submitBtn.classList.remove('success');
+                    successMessage.style.display = 'none';
+                }, 3000);
+            };
+            
+            // Make the request
+            img.src = scriptUrl + '?' + params.toString();
+            
+            console.log('Email submitted:', email, 'Source:', source);
+        });
+
+        // Add subtle hover effects for better UX
+        document.getElementById('email').addEventListener('input', function(e) {
+            if (e.target.value.length > 0) {
+                e.target.style.borderColor = '#007aff';
+            } else {
+                e.target.style.borderColor = '#d2d2d7';
+            }
+        });
+    </script>
+</body>
+</html>
